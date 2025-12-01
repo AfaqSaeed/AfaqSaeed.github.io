@@ -7,19 +7,6 @@ import { PROFILE, PROJECTS, EXPERIENCE, SOCIALS } from './constants';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-
-  // Monitor online status
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
 
   // Simple scroll spy to update active section in header
   useEffect(() => {
@@ -51,16 +38,9 @@ function App() {
   return (
     <div className="min-h-screen text-gray-200 font-sans selection:bg-neon-green selection:text-black">
       <ParticleBackground />
-
-      {/* Offline Banner */}
-      {!isOnline && (
-        <div className="fixed top-0 left-0 w-full bg-red-600/90 text-white text-center py-2 z-[60] text-sm font-bold backdrop-blur-sm animate-pulse">
-          ⚠ You are currently offline. The AI Assistant and some assets may not be available.
-        </div>
-      )}
       
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 w-full bg-dark-bg/80 backdrop-blur-md border-b border-white/10 z-40 transition-all duration-300 ${!isOnline ? 'mt-9' : 'mt-0'}`}>
+      <nav className="fixed top-0 left-0 w-full bg-dark-bg/80 backdrop-blur-md border-b border-white/10 z-40 transition-all duration-300">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <div 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
