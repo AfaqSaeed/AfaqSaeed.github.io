@@ -9,6 +9,13 @@ const ChatBot: React.FC = () => {
   ]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  
+  // API Key Management for Static Hosting
+  const [apiKey, setApiKey] = useState(process.env.API_KEY || '');
+  const [showKeyInput, setShowKeyInput] = useState(!process.env.API_KEY);
+  const [tempKey, setTempKey] = useState('');
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -17,11 +24,30 @@ const ChatBot: React.FC = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isOpen]);
+  }, [messages, isOpen, showKeyInput]);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  const handleKeySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (tempKey.trim().length > 10) {
+      setApiKey(tempKey.trim());
+      setShowKeyInput(false);
+    }
+  };
 
   const handleSend = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || !isOnline) return;
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
@@ -33,7 +59,8 @@ const ChatBot: React.FC = () => {
     setInputText('');
     setIsTyping(true);
 
-    const reply = await sendMessageToGemini(inputText);
+    // Pass the dynamic apiKey to the service
+    const reply = await sendMessageToGemini(inputText, apiKey);
     
     const botMsg: ChatMessage = {
       id: (Date.now() + 1).toString(),
@@ -59,59 +86,100 @@ const ChatBot: React.FC = () => {
         {/* Header */}
         <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-4 border-b border-gray-600 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-neon-green animate-pulse"></div>
-            <span className="font-bold text-gray-100 text-sm">Afaq's AI Assistant</span>
+            <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-neon-green animate-pulse' : 'bg-red-500'}`}></div>
+            <span className="font-bold text-gray-100 text-sm">Afaq's AI Assistant {isOnline ? '' : '(Offline)'}</span>
           </div>
           <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white transition-colors">
             ✕
           </button>
         </div>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#141414]">
-          {messages.map((msg) => (
-            <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div 
-                className={`
-                  max-w-[85%] rounded-lg p-3 text-sm
-                  ${msg.role === 'user' 
-                    ? 'bg-neon-green/20 text-neon-green border border-neon-green/30 rounded-br-none' 
-                    : 'bg-gray-800 text-gray-200 border border-gray-700 rounded-bl-none'}
-                `}
+        {/* Content Area */}
+        {showKeyInput ? (
+          <div className="flex-1 p-6 flex flex-col justify-center items-center text-center space-y-4 bg-[#141414]">
+            <div className="text-neon-green mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 mx-auto">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+              </svg>
+            </div>
+            <h3 className="text-white font-bold">API Key Required</h3>
+            <p className="text-gray-400 text-xs">
+              To use the AI features on this demo, please enter a valid Google Gemini API Key. It will not be stored permanently.
+            </p>
+            <form onSubmit={handleKeySubmit} className="w-full space-y-3">
+              <input 
+                type="password" 
+                placeholder="Paste API Key here..."
+                value={tempKey}
+                onChange={(e) => setTempKey(e.target.value)}
+                className="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:border-neon-green outline-none"
+              />
+              <button 
+                type="submit" 
+                className="w-full bg-neon-green text-black font-bold py-2 rounded hover:bg-neon-green-hover transition-colors text-sm"
               >
-                {msg.text}
-              </div>
+                Enable Chat
+              </button>
+            </form>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="text-xs text-gray-500 hover:text-neon-green underline">
+              Get an API Key
+            </a>
+          </div>
+        ) : (
+          <>
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#141414]">
+              {messages.map((msg) => (
+                <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div 
+                    className={`
+                      max-w-[85%] rounded-lg p-3 text-sm
+                      ${msg.role === 'user' 
+                        ? 'bg-neon-green/20 text-neon-green border border-neon-green/30 rounded-br-none' 
+                        : 'bg-gray-800 text-gray-200 border border-gray-700 rounded-bl-none'}
+                    `}
+                  >
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-gray-800 rounded-lg p-3 rounded-bl-none flex gap-1">
+                    <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-75"></span>
+                    <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-150"></span>
+                  </div>
+                </div>
+              )}
+              {!isOnline && (
+                <div className="flex justify-center my-2">
+                  <span className="text-xs text-red-400 bg-red-900/20 px-2 py-1 rounded">Internet connection required for AI</span>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
             </div>
-          ))}
-          {isTyping && (
-            <div className="flex justify-start">
-              <div className="bg-gray-800 rounded-lg p-3 rounded-bl-none flex gap-1">
-                <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce"></span>
-                <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-75"></span>
-                <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-150"></span>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
 
-        {/* Input */}
-        <form onSubmit={handleSend} className="p-3 bg-gray-800 border-t border-gray-700 flex gap-2">
-          <input
-            type="text"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            placeholder="Ask about my research..."
-            className="flex-1 bg-gray-900 border border-gray-600 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-neon-green focus:ring-1 focus:ring-neon-green transition-all"
-          />
-          <button 
-            type="submit"
-            disabled={!inputText.trim() || isTyping}
-            className="bg-neon-green text-gray-900 px-3 py-2 rounded-md font-bold text-sm hover:bg-neon-green-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            Send
-          </button>
-        </form>
+            {/* Input */}
+            <form onSubmit={handleSend} className="p-3 bg-gray-800 border-t border-gray-700 flex gap-2">
+              <input
+                type="text"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                disabled={!isOnline || isTyping}
+                placeholder={isOnline ? "Ask about my research..." : "Offline mode"}
+                className="flex-1 bg-gray-900 border border-gray-600 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-neon-green focus:ring-1 focus:ring-neon-green transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+              <button 
+                type="submit"
+                disabled={!inputText.trim() || isTyping || !isOnline}
+                className="bg-neon-green text-gray-900 px-3 py-2 rounded-md font-bold text-sm hover:bg-neon-green-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Send
+              </button>
+            </form>
+          </>
+        )}
       </div>
 
       {/* Toggle Button */}
