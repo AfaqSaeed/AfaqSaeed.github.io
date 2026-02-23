@@ -11,12 +11,46 @@ const ChatBot: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   
-  // API Key Management for Static Hosting
-  const [apiKey, setApiKey] = useState(process.env.API_KEY || '');
-  const [showKeyInput, setShowKeyInput] = useState(!process.env.API_KEY);
+  // API Key Management with LocalStorage
+  const [apiKey, setApiKey] = useState('');
+  const [showKeyInput, setShowKeyInput] = useState(false);
   const [tempKey, setTempKey] = useState('');
+  const [showCopyFeedback, setShowCopyFeedback] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 1. Check for shared key in URL (Recruiter Link)
+    const params = new URLSearchParams(window.location.search);
+    const sharedKey = params.get('key');
+
+    if (sharedKey) {
+      setApiKey(sharedKey);
+      localStorage.setItem('gemini_api_key', sharedKey);
+      setShowKeyInput(false);
+      
+      // Clean the URL so the key doesn't sit in the address bar visible to everyone
+      window.history.replaceState({}, '', window.location.pathname);
+      
+      // Auto-open chat for the recruiter
+      setIsOpen(true);
+      return;
+    }
+
+    // 2. Check for key in Env or LocalStorage
+    const storedKey = localStorage.getItem('gemini_api_key');
+    const envKey = process.env.API_KEY;
+
+    if (envKey) {
+      setApiKey(envKey);
+      setShowKeyInput(false);
+    } else if (storedKey) {
+      setApiKey(storedKey);
+      setShowKeyInput(false);
+    } else {
+      setShowKeyInput(true);
+    }
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -39,10 +73,28 @@ const ChatBot: React.FC = () => {
 
   const handleKeySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (tempKey.trim().length > 10) {
-      setApiKey(tempKey.trim());
+    const cleanKey = tempKey.trim();
+    if (cleanKey.length > 10) {
+      setApiKey(cleanKey);
+      localStorage.setItem('gemini_api_key', cleanKey); // Save to browser
       setShowKeyInput(false);
     }
+  };
+
+  const clearApiKey = () => {
+    localStorage.removeItem('gemini_api_key');
+    setApiKey('');
+    setTempKey('');
+    setShowKeyInput(true);
+    setMessages([{ id: Date.now().toString(), role: 'model', text: "API Key cleared. Please enter a key to continue." }]);
+  };
+
+  const copyShareLink = () => {
+    if (!apiKey) return;
+    const url = `${window.location.origin}${window.location.pathname}?key=${apiKey}`;
+    navigator.clipboard.writeText(url);
+    setShowCopyFeedback(true);
+    setTimeout(() => setShowCopyFeedback(false), 2000);
   };
 
   const handleSend = async (e?: React.FormEvent) => {
@@ -84,14 +136,49 @@ const ChatBot: React.FC = () => {
         style={{ maxHeight: '500px', height: '60vh' }}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-4 border-b border-gray-600 flex justify-between items-center">
+        <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-4 border-b border-gray-600 flex justify-between items-center relative">
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-neon-green animate-pulse' : 'bg-red-500'}`}></div>
             <span className="font-bold text-gray-100 text-sm">Afaq's AI Assistant {isOnline ? '' : '(Offline)'}</span>
           </div>
-          <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white transition-colors">
-            ✕
-          </button>
+          <div className="flex items-center gap-3">
+            
+            {/* Share Button (Recruiter Link) - Only visible if we have a key */}
+            {!showKeyInput && apiKey && (
+              <div className="relative group">
+                <button 
+                  onClick={copyShareLink}
+                  title="Copy Recruiter Share Link"
+                  className="text-gray-400 hover:text-neon-green transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                    <path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z" />
+                    <path d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z" />
+                  </svg>
+                </button>
+                {/* Tooltip feedback */}
+                {showCopyFeedback && (
+                  <div className="absolute top-full right-0 mt-2 bg-neon-green text-black text-xs font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap z-50">
+                    Link Copied!
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Clear Key Button (only visible if we have a key and it's not the env key) */}
+            {!showKeyInput && !process.env.API_KEY && (
+              <button 
+                onClick={clearApiKey} 
+                title="Clear saved API Key"
+                className="text-xs text-gray-400 hover:text-red-400 transition-colors"
+              >
+                Reset
+              </button>
+            )}
+            <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white transition-colors">
+              ✕
+            </button>
+          </div>
         </div>
 
         {/* Content Area */}
@@ -104,7 +191,7 @@ const ChatBot: React.FC = () => {
             </div>
             <h3 className="text-white font-bold">API Key Required</h3>
             <p className="text-gray-400 text-xs">
-              To use the AI features on this demo, please enter a valid Google Gemini API Key. It will not be stored permanently.
+              To enable the AI assistant, please enter your Gemini API Key.
             </p>
             <form onSubmit={handleKeySubmit} className="w-full space-y-3">
               <input 
@@ -118,7 +205,7 @@ const ChatBot: React.FC = () => {
                 type="submit" 
                 className="w-full bg-neon-green text-black font-bold py-2 rounded hover:bg-neon-green-hover transition-colors text-sm"
               >
-                Enable Chat
+                Save & Enable Chat
               </button>
             </form>
             <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="text-xs text-gray-500 hover:text-neon-green underline">

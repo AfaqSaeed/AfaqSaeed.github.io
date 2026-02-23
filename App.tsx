@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ParticleBackground from './components/ParticleBackground';
 import Section from './components/Section';
 import ProjectCard from './components/ProjectCard';
 import ChatBot from './components/ChatBot';
-import { PROFILE, PROJECTS, EXPERIENCE, SOCIALS } from './constants';
+import { PROFILE, PROJECTS, EXPERIENCE, SOCIALS, THESES } from './constants';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import ProjectDetail from './components/ProjectDetail';
 
-function App() {
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
+const PortfolioHome = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -24,7 +35,7 @@ function App() {
   // Simple scroll spy to update active section in header
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['about', 'projects', 'experience', 'contact'];
+      const sections = ['about', 'thesis', 'projects', 'experience', 'contact'];
       for (const sec of sections) {
         const el = document.getElementById(sec);
         if (el) {
@@ -69,7 +80,7 @@ function App() {
             AFAQ.<span className="text-white">AI</span>
           </div>
           <div className="hidden md:flex gap-8 text-sm font-medium">
-            {['About', 'Projects', 'Experience', 'Contact'].map((item) => (
+            {['About', 'Thesis', 'Projects', 'Experience', 'Contact'].map((item) => (
               <button
                 key={item}
                 onClick={() => scrollTo(item.toLowerCase())}
@@ -116,6 +127,58 @@ function App() {
              {PROFILE.about.map((paragraph, idx) => (
                <p key={idx}>{paragraph}</p>
              ))}
+          </div>
+        </Section>
+
+        {/* Thesis Section */}
+        <Section id="thesis">
+          <div className="flex items-center gap-4 mb-12">
+            <h2 className="text-3xl font-bold text-gray-100">Thesis Work</h2>
+            <div className="h-px flex-1 bg-gradient-to-r from-gray-700 to-transparent"></div>
+          </div>
+          <div className="space-y-24">
+            {THESES.map((thesis, index) => (
+              <div key={thesis.id} className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 items-center`}>
+                <Link to={`/project/${thesis.id}`} className="w-full lg:w-1/2 relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-neon-green to-emerald-400 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                  <div className="relative bg-dark-bg rounded-2xl overflow-hidden border border-white/10">
+                    <img 
+                      src={thesis.imageUrl} 
+                      alt={thesis.title} 
+                      className="w-full h-auto object-cover aspect-video group-hover:scale-105 transition-transform duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+                    {thesis.logoUrl && (
+                      <div className="absolute top-4 right-4 bg-white p-2 rounded-lg shadow-xl">
+                        <img src={thesis.logoUrl} alt="Institution Logo" className="h-8 w-auto object-contain" referrerPolicy="no-referrer" />
+                      </div>
+                    )}
+                  </div>
+                </Link>
+                <div className="w-full lg:w-1/2 space-y-6">
+                  <div className="inline-block px-3 py-1 rounded-full bg-neon-green/10 border border-neon-green/20 text-neon-green text-xs font-bold uppercase tracking-wider">
+                    {thesis.type} Thesis
+                  </div>
+                  <Link to={`/project/${thesis.id}`} className="block group">
+                    <h3 className="text-2xl font-bold text-white leading-tight group-hover:text-neon-green transition-colors">{thesis.title}</h3>
+                  </Link>
+                  <div className="flex items-center gap-3 text-gray-400 font-medium">
+                    <span>{thesis.institution}</span>
+                    <span className="w-1 h-1 bg-gray-600 rounded-full"></span>
+                    <span className="text-neon-green/80 font-mono text-sm">{thesis.period}</span>
+                  </div>
+                  <p className="text-gray-300 leading-relaxed">{thesis.description}</p>
+                  <ul className="space-y-3">
+                    {thesis.keyContributions?.map((contribution, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-gray-400">
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-neon-green shrink-0"></span>
+                        {contribution}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
           </div>
         </Section>
 
@@ -192,6 +255,18 @@ function App() {
       {/* Floating Chat Bot */}
       <ChatBot />
     </div>
+  );
+};
+
+function App() {
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<PortfolioHome />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

@@ -3,6 +3,8 @@ export interface Project {
   title: string;
   description: string;
   technologies?: string[];
+  imageUrl?: string;
+  videoUrl?: string;
 }
 
 export interface Experience {
@@ -17,6 +19,19 @@ export interface SocialLink {
   label: string;
   url: string;
   icon?: string;
+}
+
+export interface Thesis {
+  id: string;
+  type: 'Master' | 'Bachelor';
+  title: string;
+  institution: string;
+  period: string;
+  description: string;
+  logoUrl?: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  keyContributions?: string[];
 }
 
 export interface ChatMessage {
