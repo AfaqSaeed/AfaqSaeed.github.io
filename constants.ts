@@ -140,7 +140,7 @@ export const THESES: Thesis[] = [
     period: '2025 - 2026',
     description: 'Developed a perception-centric evaluation framework for AI-generated multi-view camera data, bridging generative AI and real-world autonomous driving perception.',
     logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Volkswagen_logo_2019.svg',
-    imageUrl: './data/photos/Master Thesis Photo.png',
+    imageUrl: './MasterThesisPhoto.png',
     keyContributions: [
       'Designed robustness metrics for downstream object detection and segmentation models',
       'Analyzed impact of synthetic multi-camera data on scene understanding performance',
