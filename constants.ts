@@ -2,7 +2,7 @@ import { Project, Experience, SocialLink, Thesis } from './types';
 
 export const PROFILE = {
   name: "Muhammad Afaq Saeed",
-  title: "AI Engine • Computer Vision • Robotics • 3D Reconstruction",
+  title: "AI Engineer • Computer Vision • Robotics • 3D Reconstruction",
   about: [
     "I am an AI engineer and computer vision researcher pursuing a Master's in Artificial Intelligence at FAU Erlangen with a minor in robotics. My work spans multimodal 3D reconstruction, NeRF-based modeling, stereo vision, mobile mapping, and generative AI for LiDAR simulation. I recently completed my Master's Thesis at Volkswagen AG, focusing on perception-centric evaluation of generative multi-view data for autonomous driving.",
     "My journey led me through mechatronics, robotics competitions, pavement inspection startups, and eventually research roles in Germany at Fraunhofer IIS, NavVis, and Volkswagen. I enjoy building systems where geometry, learning, and physical sensing meet."
