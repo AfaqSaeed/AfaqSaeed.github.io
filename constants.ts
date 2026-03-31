@@ -80,7 +80,7 @@ export const PROJECTS: Project[] = [
     description: 'Designed a mobile robotic system using CAD and embedded control for autonomous fruit picking tasks.',
     technologies: ['SolidWorks', 'Arduino', 'Robotics', 'Embedded Systems'],
     imageUrl: '/Fruit_Picking_Robot_Pic.png',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    videoUrl: 'https://youtube.com/shorts/A6-kVLaBmLI?feature=share',
   },
   {
     id: '11',
@@ -162,7 +162,7 @@ export const THESES: Thesis[] = [
     institution: 'University of Engineering and Technology',
     period: '2017 - 2021',
     description: 'Designed and developed a carbon-fiber robot capable of surviving 10-meter drops. Focused on structural robustness, lightweight materials, and embedded sensing for tactical applications.',
-    imageUrl: 'https://picsum.photos/seed/throwable-robot/800/450',
+    imageUrl: '/Throwable-Robot.jpg',
     videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Placeholder
     keyContributions: [
       'Designed a carbon-fiber chassis capable of surviving 10-meter drops',
