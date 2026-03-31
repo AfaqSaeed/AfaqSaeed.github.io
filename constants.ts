@@ -174,9 +174,9 @@ export const THESES: Thesis[] = [
 ];
 
 export const SOCIALS: SocialLink[] = [
-  { label: 'Email', url: 'mailto:your.email@domain.com' },
-  { label: 'LinkedIn', url: 'https://linkedin.com/in/afaq' },
-  { label: 'GitHub', url: 'https://github.com/afaq' },
+  { label: 'Email', url: 'mailto:scholar.afaqsaeed@gmail.com' },
+  { label: 'LinkedIn', url: 'https://linkedin.com/in/muhammad-afaq-saeed' },
+  { label: 'GitHub', url: 'https://github.com/AfaqSaeed},
   { label: 'YouTube Portfolio', url: 'https://www.youtube.com/channel/UCUPzSXCskafKOlKFYPx_x0g' },
   { label: 'RoadGauge Project', url: 'https://roadgauge.ai/news/portfolio/road-gauge-ai/' },
 ];
