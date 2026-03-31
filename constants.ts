@@ -162,7 +162,7 @@ export const THESES: Thesis[] = [
     institution: 'University of Engineering and Technology',
     period: '2017 - 2021',
     description: 'Designed and developed a carbon-fiber robot capable of surviving 10-meter drops. Focused on structural robustness, lightweight materials, and embedded sensing for tactical applications.',
-    imageUrl: '/Throwable-Robot.jpg',
+    imageUrl: '/Throwable-Robot.jpeg',
     videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Placeholder
     keyContributions: [
       'Designed a carbon-fiber chassis capable of surviving 10-meter drops',
