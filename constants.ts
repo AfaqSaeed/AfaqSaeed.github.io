@@ -4,9 +4,9 @@ export const PROFILE = {
   name: "Muhammad Afaq Saeed",
   title: "AI Engineer • Computer Vision • Robotics • 3D Reconstruction",
   about: [
-    "I am an AI engineer and computer vision researcher pursuing a Master's in Artificial Intelligence at FAU Erlangen with a minor in robotics. My work spans multimodal 3D reconstruction, NeRF-based modeling, stereo vision, mobile mapping, and generative AI for LiDAR simulation. I recently completed my Master's Thesis at Volkswagen AG, focusing on perception-centric evaluation of generative multi-view data for autonomous driving.",
-    "My journey led me through mechatronics, robotics competitions, pavement inspection startups, and eventually research roles in Germany at Fraunhofer IIS, NavVis, and Volkswagen. I enjoy building systems where geometry, learning, and physical sensing meet."
-  ]
+   "I am an AI Engineer and Computer Vision researcher specializing in perception systems and multimodal data fusion, with a Master’s degree in Artificial Intelligence from FAU Erlangen and a minor in robotics. My work focuses on enabling robust scene understanding by integrating visual, geometric, and sensor-based representations across modalities such as images, LiDAR, and audio. I have developed systems spanning multimodal 3D reconstruction, NeRF-based modeling, stereo vision, mobile mapping, and generative approaches for cross-modal data synthesis.",
+   "My Master’s thesis at Volkswagen AG focused on perception-driven evaluation of generative multi-view data for autonomous driving, emphasizing semantic consistency, temporal coherence, and downstream task reliability.",
+   "My journey spans mechatronics, competitive robotics, and applied computer vision in real-world environments, including roles at Fraunhofer IIS and NavVis. I am particularly interested in building perception systems where learning-based methods integrate tightly with physical sensing, enabling reliable understanding of complex, dynamic environments."  ]
 };
 
 export const PROJECTS: Project[] = [
@@ -32,7 +32,7 @@ export const PROJECTS: Project[] = [
     description: 'Developed a computer vision pipeline for pavement quality assessment using only RGB camera input for RoadGauge AI.',
     technologies: ['Python', 'OpenCV', 'Deep Learning', 'PyTorch'],
     imageUrl: '/pothole-mesh-graphic.jpg',
-    videoUrl: 'https://www.youtube.com/watch?v=0R81hSBxSmY',
+    videoUrl: 'https://www.youtube.com/embed/0R81hSBxSmY',
   },
   {
     id: '4',
@@ -48,7 +48,7 @@ export const PROJECTS: Project[] = [
     description: 'Trained and optimized semantic segmentation models for traffic sign detection and road-scene understanding.',
     technologies: ['TensorFlow', 'Keras', 'Segmentation', 'Python'],
     imageUrl: '/Traffic-Sign-Segmentation.png',
-    videoUrl: 'https://www.youtube.com/watch?v=15DI5DU049s',
+    videoUrl: 'https://www.youtube.com/embed/15DI5DU049s',
   },
   {
     id: '6',
@@ -64,7 +64,7 @@ export const PROJECTS: Project[] = [
     description: 'Implemented multi-view stereo, SfM, and point cloud registration pipelines for visual mapping and reconstruction.',
     technologies: ['SfM', 'MVS', 'Open3D', 'Python'],
     imageUrl: 'https://picsum.photos/seed/3drecon/800/450',
-    videoUrl: 'https://www.youtube.com/watch?v=PAdlZG9DvmA',
+    videoUrl: 'https://www.youtube.com/embed/PAdlZG9DvmA',
   },
   {
     id: '8',
@@ -80,7 +80,7 @@ export const PROJECTS: Project[] = [
     description: 'Designed a mobile robotic system using CAD and embedded control for autonomous fruit picking tasks.',
     technologies: ['SolidWorks', 'Arduino', 'Robotics', 'Embedded Systems'],
     imageUrl: '/Fruit_Picking_Robot_Pic.png',
-    videoUrl: 'https://youtube.com/shorts/A6-kVLaBmLI?feature=share',
+    videoUrl: 'https://youtube.com/embed/A6-kVLaBmLI',
   },
   {
     id: '11',
@@ -88,7 +88,7 @@ export const PROJECTS: Project[] = [
     description: 'Developed a scale estimation scheme integrating GPS with vision-based SfM reconstructions for accurate geo-localization.',
     technologies: ['GPS', 'SfM', 'Python', 'Optimization'],
     imageUrl: '/DeepRoad-V2-modal-1.png',
-    videoUrl: 'https://www.youtube.com/watch?v=u_Y6Bhch9U8',
+    videoUrl: 'https://www.youtube.com/embed/u_Y6Bhch9U8',
   },
   {
     id: '12',
@@ -96,7 +96,7 @@ export const PROJECTS: Project[] = [
     description: 'Managed and designed labeling workflows for a team of 10 annotators to support CV model development.Including SALT a custom  colab notebook based semantic segmentation labeller ',
     technologies: ['Management', 'Data Engineering', 'CVAT', 'LabelImg'],
     imageUrl: '/SALT.png',
-    videoUrl: 'https://www.youtube.com/watch?v=ZJB0agWm0yo',
+    videoUrl: 'https://www.youtube.com/embed/ZJB0agWm0yo',
   }
 ];
 
