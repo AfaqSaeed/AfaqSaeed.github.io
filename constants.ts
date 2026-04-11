@@ -55,7 +55,7 @@ export const PROJECTS: Project[] = [
     title: 'Generative AI for LiDAR Point Clouds',
     description: 'Generated synthetic LiDAR point clouds from RGB images using generative models for sensor simulation and dataset augmentation.',
     technologies: ['GANs', 'LiDAR', 'Python', 'PyTorch'],
-    imageUrl: 'https://picsum.photos/seed/genai/800/450',
+    imageUrl: '/Lidar-prediction_from_images.png',
     videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
   },
   {
