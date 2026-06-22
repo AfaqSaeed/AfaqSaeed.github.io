@@ -14,16 +14,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       className="group relative bg-white/5 border border-white/10 rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:-translate-y-2 hover:bg-white/10 hover:border-neon-green/40 hover:shadow-[0_0_30px_rgba(212,255,85,0.15)] block"
     >
       {/* Image Preview */}
-      {project.imageUrl && (
-        <div className="h-48 w-full overflow-hidden border-b border-white/10">
+      <div className="h-48 w-full overflow-hidden border-b border-white/10">
+        {project.imageUrl ? (
           <img 
             src={project.imageUrl} 
             alt={project.title} 
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100"
             referrerPolicy="no-referrer"
           />
-        </div>
-      )}
+        ) : (
+          <div className="w-full h-full bg-white/5 flex items-center justify-center px-6 text-center">
+            <span className="text-xs font-mono uppercase tracking-[0.2em] text-gray-500">
+              Project visual unavailable
+            </span>
+          </div>
+        )}
+      </div>
 
       <div className="p-6 space-y-4">
         {/* Robotic Corner Effect */}
@@ -34,7 +40,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         </h3>
         
         <p className="text-gray-400 leading-relaxed text-sm line-clamp-3">
-          {project.description}
+          {project.shortDescription}
         </p>
         
         {/* Tech stack tags */}
