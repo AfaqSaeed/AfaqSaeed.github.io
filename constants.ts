@@ -155,6 +155,8 @@ export const PROJECTS: Project[] = [
     period: '2026',
     imageUrl: '/audio-visual-event-recognition.png',
     githubUrl: 'https://github.com/AfaqSaeed/Audio-Visual-Object-Detection',
+    videoUrl: 'https://www.youtube.com/embed/Y0OhKuujTT8',
+
   },
   {
     id: '2',
