@@ -104,6 +104,59 @@ export const PROJECTS: Project[] = [
     videoUrl: 'https://www.youtube.com/embed/0R81hSBxSmY',
   },
   {
+    id: 'audio-visual-event-recognition',
+    title: 'Audio-Visual Event Recognition with Open-Vocabulary Vision',
+    shortDescription:
+      'Built an interpretable multimodal pipeline that uses SSAST to locate sound events, YOLO-World and FastSAM to identify relevant objects, and configurable JSON rules to verify fine-grained kitchen activities from audio and video.',
+    overview:
+      'Developed a modular audio-visual event-recognition system that first detects a sound event, extracts the corresponding video interval, searches for relevant objects, and combines evidence from both modalities through explicit event recipes. Unlike a fixed end-to-end activity classifier, the system can be extended with new events by defining their audio cue, required objects, and validation conditions.',
+    problem:
+      'Audio alone can identify a sound without confirming what caused it, while vision alone must search long videos and may confuse visually similar activities. The challenge was to use sound as a temporal cue, open-vocabulary vision as semantic evidence, and explicit cross-modal reasoning to determine whether a fine-grained event actually occurred.',
+    myRole: [
+      'Designed and implemented the end-to-end audio-visual inference pipeline',
+      'Benchmarked PANN, AudioInceptionNeXt, and SSAST for audio-event recognition',
+      'Evaluated Grounding DINO, YOLOE, YOLO-World, SAM, and FastSAM-based visual pipelines under local hardware constraints',
+      'Implemented audio-guided video-clip extraction and prompted object detection and segmentation',
+      'Designed configurable JSON event recipes with required object groups, temporal support thresholds, and proximity constraints',
+      'Built evidence visualisation and structured CSV and JSON reporting for detected events',
+      'Analysed failure modes including sustained sounds, ambiguous audio events, and frame-to-frame detection fluctuations'
+    ],
+    approach: [
+      'EPIC-SOUNDS audio-event recognition using SSAST',
+      'Temporal localisation of candidate events from audio predictions',
+      'Audio-guided extraction of relevant video intervals',
+      'Open-vocabulary object detection using YOLO-World',
+      'Object segmentation using FastSAM',
+      'Recipe-based multimodal fusion using required-object and proximity checks',
+      'JSON-configurable event definitions for extending the system without retraining',
+      'Evidence-video generation and structured event reporting'
+    ],
+    results: [
+      'SSAST achieved the strongest tested audio-recognition result at 0.67 F1, compared with 0.64 for AudioInceptionNeXt',
+      'Implemented configurable recipes for chopping cucumber, chopping celery, washing carrot, and washing cucumber',
+      'Generated event-level clips, rendered evidence, predictions, reports, and summary files',
+      'Demonstrated an interpretable cross-modal reasoning pipeline for distinguishing fine-grained kitchen events',
+      'Identified key limitations in sustained-sound localisation and temporal stability of open-vocabulary detections'
+    ],
+    technologies: [
+      'Python',
+      'PyTorch',
+      'SSAST',
+      'EPIC-SOUNDS',
+      'YOLO-World',
+      'FastSAM',
+      'Ultralytics',
+      'Audio Event Detection',
+      'Open-Vocabulary Detection',
+      'Multimodal AI',
+      'JSON'
+    ],
+    organization: 'Independent Project',
+    period: '2026',
+    imageUrl: '/audio-visual-event-recognition.png',
+    githubUrl: 'https://github.com/AfaqSaeed/Audio-Visual-Object-Detection',
+  },
+  {
     id: '2',
     title: 'Multimodal 3D Room Reconstruction from Vision and Audio',
     shortDescription: 'Developed a multimodal room-reconstruction pipeline combining NeRF-based visual geometry with CRNN-based acoustic inference and evaluated both modalities across seven indoor environments.',
