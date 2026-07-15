@@ -2,12 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Project } from '../types';
 import { ArrowRight } from 'lucide-react';
+import { useLanguage } from '../i18n';
 
 interface ProjectCardProps {
   project: Project;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+  const { t } = useLanguage();
   return (
     <Link 
       to={`/project/${project.id}`}
@@ -25,7 +27,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         ) : (
           <div className="w-full h-full bg-white/5 flex items-center justify-center px-6 text-center">
             <span className="text-xs font-mono uppercase tracking-[0.2em] text-gray-500">
-              Project visual unavailable
+              {t('Project visual unavailable')}
             </span>
           </div>
         )}
@@ -58,7 +60,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         )}
 
         <div className="pt-2 flex items-center gap-2 text-neon-green text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-          View Details <ArrowRight size={16} />
+          {t('View Details')} <ArrowRight size={16} />
         </div>
       </div>
     </Link>

@@ -7,6 +7,8 @@ import ChatBot from './components/ChatBot';
 import { PROFILE, PROJECTS, EXPERIENCE, SOCIALS, THESES } from './constants';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import ProjectDetail from './components/ProjectDetail';
+import { LanguageProvider, LanguageSwitch, useLanguage } from './i18n';
+import { DE_EXPERIENCE, DE_PROFILE, DE_PROJECTS, DE_THESES } from './content.de';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -17,6 +19,11 @@ const ScrollToTop = () => {
 };
 
 const PortfolioHome = () => {
+  const { language, t } = useLanguage();
+  const profile = language === 'de' ? DE_PROFILE : PROFILE;
+  const projects = language === 'de' ? DE_PROJECTS : PROJECTS;
+  const experience = language === 'de' ? DE_EXPERIENCE : EXPERIENCE;
+  const theses = language === 'de' ? DE_THESES : THESES;
   const [activeSection, setActiveSection] = useState('home');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -66,7 +73,7 @@ const PortfolioHome = () => {
       {/* Offline Banner */}
       {!isOnline && (
         <div className="fixed top-0 left-0 w-full bg-red-600/90 text-white text-center py-2 z-[60] text-sm font-bold backdrop-blur-sm animate-pulse">
-          ⚠ You are currently offline. The AI Assistant and some assets may not be available.
+          ⚠ {language === 'de' ? 'Sie sind derzeit offline. Der KI-Assistent und einige Inhalte sind eventuell nicht verfügbar.' : 'You are currently offline. The AI Assistant and some assets may not be available.'}
         </div>
       )}
       
@@ -86,9 +93,10 @@ const PortfolioHome = () => {
                 onClick={() => scrollTo(item.toLowerCase())}
                 className={`hover:text-neon-green transition-colors ${activeSection === item.toLowerCase() ? 'text-neon-green' : 'text-gray-400'}`}
               >
-                {item}
+                {t(item)}
               </button>
             ))}
+            <LanguageSwitch />
           </div>
         </div>
       </nav>
@@ -99,17 +107,17 @@ const PortfolioHome = () => {
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">
             <span className="block text-white mb-2">Muhammad Afaq Saeed</span>
             <span className="bg-gradient-to-r from-neon-green to-emerald-400 bg-clip-text text-transparent">
-              {PROFILE.title}
+              {profile.title}
             </span>
           </h1>
           <div className="h-1 w-24 bg-neon-green mx-auto rounded-full mb-8 shadow-[0_0_15px_rgba(212,255,85,0.6)]"></div>
           
           <div className="flex flex-wrap justify-center gap-4 mt-8">
              <button onClick={() => scrollTo('projects')} className="bg-neon-green text-black px-6 py-3 rounded-lg font-bold shadow-[0_0_20px_rgba(212,255,85,0.4)] hover:shadow-[0_0_30px_rgba(212,255,85,0.6)] hover:-translate-y-1 transition-all duration-300">
-               View Projects
+               {t('View Projects')}
              </button>
              <button onClick={() => scrollTo('contact')} className="border border-neon-green text-neon-green px-6 py-3 rounded-lg font-bold hover:bg-neon-green/10 hover:-translate-y-1 transition-all duration-300">
-               Contact Me
+               {t('Contact Me')}
              </button>
           </div>
         </div>
@@ -120,11 +128,11 @@ const PortfolioHome = () => {
         {/* About Section */}
         <Section id="about" className="space-y-6">
           <div className="flex items-center gap-4 mb-8">
-            <h2 className="text-3xl font-bold text-gray-100">About Me</h2>
+            <h2 className="text-3xl font-bold text-gray-100">{t('About Me')}</h2>
             <div className="h-px flex-1 bg-gradient-to-r from-gray-700 to-transparent"></div>
           </div>
           <div className="grid md:grid-cols-1 gap-8 text-lg text-gray-300 leading-relaxed border-l-4 border-gray-600 pl-6 bg-white/5 p-6 rounded-r-xl">
-             {PROFILE.about.map((paragraph, idx) => (
+             {profile.about.map((paragraph, idx) => (
                <p key={idx}>{paragraph}</p>
              ))}
           </div>
@@ -133,11 +141,11 @@ const PortfolioHome = () => {
         {/* Thesis Section */}
         <Section id="thesis">
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-3xl font-bold text-gray-100">Thesis Work</h2>
+            <h2 className="text-3xl font-bold text-gray-100">{t('Thesis Work')}</h2>
             <div className="h-px flex-1 bg-gradient-to-r from-gray-700 to-transparent"></div>
           </div>
           <div className="space-y-24">
-            {THESES.map((thesis, index) => (
+            {theses.map((thesis, index) => (
               <div key={thesis.id} className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 items-center`}>
                 <Link to={`/project/${thesis.id}`} className="w-full lg:w-1/2 relative group">
                   <div className="absolute -inset-1 bg-gradient-to-r from-neon-green to-emerald-400 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
@@ -150,14 +158,14 @@ const PortfolioHome = () => {
                     />
                     {thesis.logoUrl && (
                       <div className="absolute top-4 right-4 bg-white p-2 rounded-lg shadow-xl">
-                        <img src={thesis.logoUrl} alt="Institution Logo" className="h-8 w-auto object-contain" referrerPolicy="no-referrer" />
+                        <img src={thesis.logoUrl} alt={t('Institution Logo')} className="h-8 w-auto object-contain" referrerPolicy="no-referrer" />
                       </div>
                     )}
                   </div>
                 </Link>
                 <div className="w-full lg:w-1/2 space-y-6">
                   <div className="inline-block px-3 py-1 rounded-full bg-neon-green/10 border border-neon-green/20 text-neon-green text-xs font-bold uppercase tracking-wider">
-                    {thesis.type} Thesis
+                    {t(`${thesis.type} Thesis`)}
                   </div>
                   <Link to={`/project/${thesis.id}`} className="block group">
                     <h3 className="text-2xl font-bold text-white leading-tight group-hover:text-neon-green transition-colors">{thesis.title}</h3>
@@ -185,11 +193,11 @@ const PortfolioHome = () => {
         {/* Projects Section */}
         <Section id="projects">
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-3xl font-bold text-gray-100">Featured Projects</h2>
+            <h2 className="text-3xl font-bold text-gray-100">{t('Featured Projects')}</h2>
             <div className="h-px flex-1 bg-gradient-to-r from-gray-700 to-transparent"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PROJECTS.map((project, index) => (
+            {projects.map((project, index) => (
               <Section key={project.id} delay={index * 100}>
                 <ProjectCard project={project} />
               </Section>
@@ -200,11 +208,11 @@ const PortfolioHome = () => {
         {/* Experience Section */}
         <Section id="experience">
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-3xl font-bold text-gray-100">Experience</h2>
+            <h2 className="text-3xl font-bold text-gray-100">{t('Experience')}</h2>
             <div className="h-px flex-1 bg-gradient-to-r from-gray-700 to-transparent"></div>
           </div>
           <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-neon-green/50 before:to-transparent">
-            {EXPERIENCE.map((job, index) => (
+            {experience.map((job, index) => (
               <div key={job.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                 
                 {/* Timeline Dot */}
@@ -230,7 +238,7 @@ const PortfolioHome = () => {
             {/* Decoration */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-neon-green/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
-            <h2 className="text-3xl font-bold mb-8 text-white">Get In Touch</h2>
+            <h2 className="text-3xl font-bold mb-8 text-white">{t('Get In Touch')}</h2>
             <div className="flex flex-wrap justify-center gap-6">
               {SOCIALS.map((link) => (
                 <a 
@@ -240,13 +248,13 @@ const PortfolioHome = () => {
                   rel="noopener noreferrer"
                   className="px-6 py-3 bg-white/5 border border-white/10 rounded-lg hover:bg-neon-green hover:text-black hover:border-neon-green transition-all duration-300 font-semibold group"
                 >
-                  {link.label} <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+                  {t(link.label)} <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
                 </a>
               ))}
             </div>
             
             <p className="mt-10 text-gray-500 text-sm">
-              © {new Date().getFullYear()} {PROFILE.name}. All rights reserved.
+              © {new Date().getFullYear()} {profile.name}. {t('All rights reserved.')}
             </p>
           </div>
         </Section>
@@ -260,13 +268,15 @@ const PortfolioHome = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<PortfolioHome />} />
-        <Route path="/project/:id" element={<ProjectDetail />} />
-      </Routes>
-    </BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<PortfolioHome />} />
+          <Route path="/project/:id" element={<ProjectDetail />} />
+        </Routes>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }
 

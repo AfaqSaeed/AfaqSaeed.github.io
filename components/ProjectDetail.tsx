@@ -4,6 +4,8 @@ import { PROJECTS, THESES } from '../constants';
 import { Project, Thesis } from '../types';
 import { motion } from 'motion/react';
 import { ArrowLeft, ExternalLink, Youtube, Cpu, Calendar, Building, Mail, FileText, Github } from 'lucide-react';
+import { LanguageSwitch, useLanguage } from '../i18n';
+import { DE_PROJECTS, DE_THESES } from '../content.de';
 
 type DetailData = Project | Thesis;
 
@@ -120,11 +122,12 @@ const BulletList: React.FC<{ items: string[] }> = ({ items }) => (
 );
 
 const ProjectDetail: React.FC = () => {
+  const { language, t } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const project = PROJECTS.find(p => p.id === id);
-  const thesis = THESES.find(t => t.id === id);
+  const project = (language === 'de' ? DE_PROJECTS : PROJECTS).find(p => p.id === id);
+  const thesis = (language === 'de' ? DE_THESES : THESES).find(t => t.id === id);
   const data = project || thesis;
 
   useEffect(() => {
@@ -134,12 +137,12 @@ const ProjectDetail: React.FC = () => {
   if (!data) {
     return (
       <div className="min-h-screen bg-dark-bg flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-3xl font-bold mb-4 text-white">Project Not Found</h2>
+        <h2 className="text-3xl font-bold mb-4 text-white">{t('Project Not Found')}</h2>
         <button 
           onClick={() => navigate('/')}
           className="text-neon-green hover:underline flex items-center gap-2"
         >
-          <ArrowLeft size={20} /> Back to Home
+          <ArrowLeft size={20} /> {t('Back to Home')}
         </button>
       </div>
     );
@@ -165,9 +168,9 @@ const ProjectDetail: React.FC = () => {
           <Link to="/" className="text-xl font-bold tracking-tighter text-neon-green hover:text-white transition-colors">
             AFAQ.<span className="text-white">AI</span>
           </Link>
-          <Link to="/" className="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-neon-green transition-colors">
-            <ArrowLeft size={16} /> Back to Portfolio
-          </Link>
+          <div className="flex items-center gap-4"><LanguageSwitch /><Link to="/" className="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-neon-green transition-colors">
+            <ArrowLeft size={16} /> {t('Back to Portfolio')}
+          </Link></div>
         </div>
       </nav>
 
@@ -229,30 +232,30 @@ const ProjectDetail: React.FC = () => {
                 )}
               </div>
 
-              <DetailSection title="Overview">
+              <DetailSection title={t('Overview')}>
                 <p className="text-lg text-gray-300 leading-relaxed">{overview}</p>
               </DetailSection>
 
               {!isThesis && data.problem && (
-                <DetailSection title="Problem">
+                <DetailSection title={t('Problem')}>
                   <p className="text-lg text-gray-300 leading-relaxed">{data.problem}</p>
                 </DetailSection>
               )}
 
               {contributions && contributions.length > 0 && (
-                <DetailSection title={isThesis ? 'Key Contributions' : 'My Contribution'}>
+                <DetailSection title={t(isThesis ? 'Key Contributions' : 'My Role')}>
                   <BulletList items={contributions} />
                 </DetailSection>
               )}
 
               {!isThesis && data.approach && data.approach.length > 0 && (
-                <DetailSection title="Technical Approach">
+                <DetailSection title={t('Approach')}>
                   <BulletList items={data.approach} />
                 </DetailSection>
               )}
 
               {!isThesis && data.results && data.results.length > 0 && (
-                <DetailSection title="Results">
+                <DetailSection title={t('Results')}>
                   <BulletList items={data.results} />
                 </DetailSection>
               )}
@@ -282,17 +285,17 @@ const ProjectDetail: React.FC = () => {
             <div className="space-y-8">
               {(organization || period) && (
                 <div className="bg-white/5 border border-white/10 p-6 rounded-2xl space-y-4">
-                  <h3 className="text-white font-bold">Organization and Period</h3>
+                  <h3 className="text-white font-bold">{t('Organization and Period')}</h3>
                   <div className="space-y-3 text-sm text-gray-400">
                     {organization && (
                       <div>
-                        <div className="text-xs uppercase tracking-wider text-neon-green/80 mb-1">Organization</div>
+                        <div className="text-xs uppercase tracking-wider text-neon-green/80 mb-1">{t('Organization')}</div>
                         <div>{organization}</div>
                       </div>
                     )}
                     {period && (
                       <div>
-                        <div className="text-xs uppercase tracking-wider text-neon-green/80 mb-1">Period</div>
+                        <div className="text-xs uppercase tracking-wider text-neon-green/80 mb-1">{t('Period')}</div>
                         <div>{period}</div>
                       </div>
                     )}
@@ -305,7 +308,7 @@ const ProjectDetail: React.FC = () => {
                 <div className="bg-white/5 border border-white/10 p-6 rounded-2xl space-y-4">
                   <div className="flex items-center gap-2 text-white font-bold">
                     <Cpu size={20} className="text-neon-green" />
-                    <h3>Technologies</h3>
+                    <h3>{t('Technologies')}</h3>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {data.technologies.map(tech => (
@@ -319,7 +322,7 @@ const ProjectDetail: React.FC = () => {
 
               {/* Actions */}
               <div className="bg-white/5 border border-white/10 p-6 rounded-2xl space-y-4">
-                <h3 className="text-white font-bold">Project Evidence</h3>
+                <h3 className="text-white font-bold">{t('Project Evidence')}</h3>
                 <div className="space-y-3">
                   {actions.map(action => (
                     <a
@@ -329,7 +332,7 @@ const ProjectDetail: React.FC = () => {
                       rel={action.external ? 'noopener noreferrer' : undefined}
                       className="w-full bg-neon-green text-black px-4 py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(212,255,85,0.4)] transition-all text-sm"
                     >
-                      {action.label}
+                      {t(action.label)}
                       {renderActionIcon(action.kind)}
                     </a>
                   ))}

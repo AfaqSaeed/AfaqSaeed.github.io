@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { sendMessageToGemini } from '../services/geminiService';
 import { ChatMessage } from '../types';
+import { useLanguage } from '../i18n';
 
 const ChatBot: React.FC = () => {
+  const { language, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: '0', role: 'model', text: "Hi! I'm Afaq's AI assistant. Ask me about his projects, research, or experience." }
+    { id: '0', role: 'model', text: language === 'de' ? 'Hallo! Ich bin Afaqs KI-Assistent. Fragen Sie mich nach seinen Projekten, seiner Forschung oder Berufserfahrung.' : "Hi! I'm Afaq's AI assistant. Ask me about his projects, research, or experience." }
   ]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -112,7 +114,7 @@ const ChatBot: React.FC = () => {
     setIsTyping(true);
 
     // Pass the dynamic apiKey to the service
-    const reply = await sendMessageToGemini(inputText, apiKey);
+    const reply = await sendMessageToGemini(language === 'de' ? `Bitte antworte auf Deutsch. Frage: ${inputText}` : inputText, apiKey);
     
     const botMsg: ChatMessage = {
       id: (Date.now() + 1).toString(),
@@ -139,7 +141,7 @@ const ChatBot: React.FC = () => {
         <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-4 border-b border-gray-600 flex justify-between items-center relative">
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-neon-green animate-pulse' : 'bg-red-500'}`}></div>
-            <span className="font-bold text-gray-100 text-sm">Afaq's AI Assistant {isOnline ? '' : '(Offline)'}</span>
+            <span className="font-bold text-gray-100 text-sm">{t("Afaq's AI Assistant")} {isOnline ? '' : `(${t('Offline')})`}</span>
           </div>
           <div className="flex items-center gap-3">
             
@@ -159,7 +161,7 @@ const ChatBot: React.FC = () => {
                 {/* Tooltip feedback */}
                 {showCopyFeedback && (
                   <div className="absolute top-full right-0 mt-2 bg-neon-green text-black text-xs font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap z-50">
-                    Link Copied!
+                    {t('Link Copied!')}
                   </div>
                 )}
               </div>
@@ -172,7 +174,7 @@ const ChatBot: React.FC = () => {
                 title="Clear saved API Key"
                 className="text-xs text-gray-400 hover:text-red-400 transition-colors"
               >
-                Reset
+                {t('Reset')}
               </button>
             )}
             <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white transition-colors">
@@ -189,14 +191,14 @@ const ChatBot: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
               </svg>
             </div>
-            <h3 className="text-white font-bold">API Key Required</h3>
+            <h3 className="text-white font-bold">{t('API Key Required')}</h3>
             <p className="text-gray-400 text-xs">
-              To enable the AI assistant, please enter your Gemini API Key.
+              {t('To enable the AI assistant, please enter your Gemini API Key.')}
             </p>
             <form onSubmit={handleKeySubmit} className="w-full space-y-3">
               <input 
                 type="password" 
-                placeholder="Paste API Key here..."
+                placeholder={t('Paste API Key here...')}
                 value={tempKey}
                 onChange={(e) => setTempKey(e.target.value)}
                 className="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:border-neon-green outline-none"
@@ -205,11 +207,11 @@ const ChatBot: React.FC = () => {
                 type="submit" 
                 className="w-full bg-neon-green text-black font-bold py-2 rounded hover:bg-neon-green-hover transition-colors text-sm"
               >
-                Save & Enable Chat
+                {t('Save & Enable Chat')}
               </button>
             </form>
             <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="text-xs text-gray-500 hover:text-neon-green underline">
-              Get an API Key
+              {t('Get an API Key')}
             </a>
           </div>
         ) : (
@@ -241,7 +243,7 @@ const ChatBot: React.FC = () => {
               )}
               {!isOnline && (
                 <div className="flex justify-center my-2">
-                  <span className="text-xs text-red-400 bg-red-900/20 px-2 py-1 rounded">Internet connection required for AI</span>
+                  <span className="text-xs text-red-400 bg-red-900/20 px-2 py-1 rounded">{t('Internet connection required for AI')}</span>
                 </div>
               )}
               <div ref={messagesEndRef} />
@@ -254,7 +256,7 @@ const ChatBot: React.FC = () => {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 disabled={!isOnline || isTyping}
-                placeholder={isOnline ? "Ask about my research..." : "Offline mode"}
+                placeholder={t(isOnline ? 'Ask about my research...' : 'Offline mode')}
                 className="flex-1 bg-gray-900 border border-gray-600 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-neon-green focus:ring-1 focus:ring-neon-green transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <button 
@@ -262,7 +264,7 @@ const ChatBot: React.FC = () => {
                 disabled={!inputText.trim() || isTyping || !isOnline}
                 className="bg-neon-green text-gray-900 px-3 py-2 rounded-md font-bold text-sm hover:bg-neon-green-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Send
+                {t('Send')}
               </button>
             </form>
           </>
