@@ -71,6 +71,50 @@ export const PROJECTS: Project[] = [
     period: 'Dec 2024 - Apr 2025',
     imageUrl: '/Marker-Detection .png',
   },
+
+  {
+    id: '1',
+    title: 'Video-Based 3D Phone Condition Assessment',
+    shortDescription: 'Developing a lightweight computer-vision pipeline that converts a mobile-phone video into a 3D condition representation, maps visible damage, calculates a cosmetic grade and estimates price depreciation.',
+    overview: 'This personal project explores how a short video recorded with an ordinary camera can be used to assess the physical condition of a used mobile phone. The system is designed as an end-to-end pipeline covering video processing, 3D representation, defect localisation, damage scoring, price estimation and automated report generation.',
+    problem: 'Online buyers must usually assess a used phone from a small set of seller-selected images. Reflections, incomplete coverage and inconsistent descriptions make it difficult to understand where damage is located and how strongly it should affect the device value.',
+    myRole: [
+      'Designed the modular end-to-end assessment pipeline',
+      'Developing video preprocessing and phone-view extraction',
+      'Investigating lightweight 3D reconstruction and canonical-mesh approaches',
+      'Designing defect-mapping, condition-scoring and price-depreciation methods',
+      'Building an automated visual damage-report generator'
+    ],
+    approach: [
+      'Guided video capture and representative-frame extraction',
+      'Camera-pose estimation and coarse 3D phone representation',
+      'Detection of screen cracks, scratches, dents and chipped corners',
+      'Projection of image-space defects onto a 3D phone surface',
+      'Rule-based cosmetic grading and price-depreciation estimation',
+      'HTML report generation with visual evidence and assessment results'
+    ],
+    results: [
+      'Defined a modular pipeline that supports incremental replacement of each component',
+      'Designed a hardware-conscious implementation for a 4 GB consumer GPU',
+      'Created an initial MVP architecture covering video input through final reporting',
+      'Established a path from manual defect annotation to automated multi-view detection'
+    ],
+    technologies: [
+      'Python',
+      'OpenCV',
+      'COLMAP',
+      'Trimesh',
+      'Open3D',
+      'Jinja2',
+      'Three.js',
+      'Computer Vision',
+      '3D Reconstruction'
+    ],
+    organization: 'Personal Project',
+    period: 'Jul 2026 - Present',
+    imageUrl: '/phone-condition-assessment.png',
+    githubUrl: 'https://github.com/AfaqSaeed/Phone-Condition-Assessment',
+  },
   {
     id: '3',
     title: 'AI-Based Road Surface Inspection from Monocular Video',
@@ -190,7 +234,7 @@ export const PROJECTS: Project[] = [
     imageUrl: '/Vision-and-Audio-Based-3D-Reconstrtion.png',
   },
   {
-    id: '1',
+    id: '12',
     title: 'Dynamic Object Removal for LiDAR Mapping',
     shortDescription: 'Benchmarked LiDAR-MOS, Removert and DynaSLAM for removing vehicles and other dynamic objects from mapping data, with LiDAR-MOS reaching approximately 20 scans per second.',
     overview: 'Dynamic objects create ghost structures and inconsistent geometry in maps produced from repeated LiDAR scans. This research project evaluated different methods for identifying and removing dynamic objects from autonomous-driving datasets.',
