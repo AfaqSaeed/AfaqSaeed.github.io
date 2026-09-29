@@ -232,6 +232,32 @@ const ProjectDetail: React.FC = () => {
                 )}
               </div>
 
+              {!isThesis && data.galleryImages && data.galleryImages.length > 0 && (
+                <DetailSection title={t('Working Screens')}>
+                  <div className="space-y-8">
+                    {data.galleryImages.map((screen, index) => (
+                      <figure key={screen.url} className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-xl">
+                        <a href={screen.url} target="_blank" rel="noopener noreferrer" className="block overflow-hidden">
+                          <img
+                            src={screen.url}
+                            alt={`${t(screen.title)} — ${data.title}`}
+                            loading="lazy"
+                            className="w-full h-auto object-cover transition-transform duration-500 hover:scale-[1.015]"
+                          />
+                        </a>
+                        <figcaption className="p-5">
+                          <div className="flex items-center gap-3">
+                            <span className="font-mono text-xs text-neon-green">0{index + 1}</span>
+                            <h3 className="font-bold text-white">{t(screen.title)}</h3>
+                          </div>
+                          <p className="mt-2 text-sm leading-relaxed text-gray-400">{t(screen.description)}</p>
+                        </figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                </DetailSection>
+              )}
+
               <DetailSection title={t('Overview')}>
                 <p className="text-lg text-gray-300 leading-relaxed">{overview}</p>
               </DetailSection>

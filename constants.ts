@@ -113,6 +113,13 @@ export const PROJECTS: Project[] = [
     organization: 'Personal Project',
     period: 'Jul 2026 - Present',
     imageUrl: '/phone-condition-assessment.png',
+    galleryImages: [
+      {
+        url: '/phone-assessment-working-ui.png',
+        title: 'Phone Condition Assessment Interface',
+        description: 'Working assessment screen combining device dimensions, processed recordings, interactive 3D damage mapping, finding review, scoring and report export.'
+      }
+    ],
     githubUrl: 'https://github.com/AfaqSaeed/Phone-Condition-Assessment',
   },
   {

@@ -11,6 +11,11 @@ export interface Project {
   organization?: string;
   period?: string;
   imageUrl?: string;
+  galleryImages?: Array<{
+    url: string;
+    title: string;
+    description: string;
+  }>;
   videoUrl?: string;
   githubUrl?: string;
   reportUrl?: string;
